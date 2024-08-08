@@ -12,6 +12,7 @@ import necesse.engine.network.gameNetworkData.GNDItemMap;
 import necesse.engine.network.packet.PacketOpenContainer;
 import necesse.engine.network.server.ServerClient;
 import necesse.engine.registries.ContainerRegistry;
+import necesse.engine.util.GameBlackboard;
 import necesse.entity.mobs.PlayerMob;
 import necesse.entity.mobs.buffs.BuffModifiers;
 import necesse.gfx.GameColor;
@@ -58,10 +59,10 @@ public class PlannerItem extends PouchItem implements PlaceableItemInterface {
         super.loadTextures();
     }
 
-    public ListGameTooltips getTooltips(InventoryItem item, PlayerMob perspective) {
-        ListGameTooltips tooltips = super.getTooltips(item, perspective);
+    public ListGameTooltips getTooltips(InventoryItem item, PlayerMob perspective, GameBlackboard blackboard) {
+        ListGameTooltips tooltips = super.getTooltips(item, perspective, blackboard);
         tooltips.add(Localization.translate("itemtooltip", "rclickinvopentip"));
-        acceptItemPair(item, (invItem, i) -> tooltips.add(new StringTooltips(i.getDisplayName(invItem), i.getRarityColor())));
+        acceptItemPair(item, (invItem, i) -> tooltips.add(new StringTooltips(i.getDisplayName(invItem), i.getRarityColor(invItem))));
         if (!Screen.isKeyDown(340) && !Screen.isKeyDown(344)) {
             tooltips.add(new StringTooltips(Localization.translate("ui", "shiftmoreinfo"), GameColor.LIGHT_GRAY));
         } else {
@@ -112,8 +113,8 @@ public class PlannerItem extends PouchItem implements PlaceableItemInterface {
 
 
     // PouchItem stuff
-    protected void openContainer(ServerClient client, int slotIndex) {
-        PacketOpenContainer p = new PacketOpenContainer(MultiTools.plannerContainer, ItemInventoryContainer.getContainerContent(this, slotIndex));
+    protected void openContainer(ServerClient client, PlayerInventorySlot inventorySlot) {
+        PacketOpenContainer p = new PacketOpenContainer(MultiTools.plannerContainer, ItemInventoryContainer.getContainerContent(this, inventorySlot));
         ContainerRegistry.openAndSendContainer(client, p);
     }
 

@@ -49,8 +49,7 @@ public class MultitoolToolItem extends CustomPickaxeToolItem {
     }
 
     @Override
-    public ListGameTooltips getTooltips(InventoryItem item, PlayerMob perspective) {
-        ListGameTooltips tooltips = super.getTooltips(item, perspective);
+    public void addToolTooltips(ListGameTooltips tooltips) {
         if (!Screen.isKeyDown(340) && !Screen.isKeyDown(344)) {
             tooltips.add(new StringTooltips(Localization.translate("ui", "shiftmoreinfo"), GameColor.LIGHT_GRAY));
         } else {
@@ -58,7 +57,6 @@ public class MultitoolToolItem extends CustomPickaxeToolItem {
             tooltips.add(Localization.translate("itemtooltip", "drs_pivelaxe_tip2"));
             tooltips.add(Localization.translate("itemtooltip", "drs_pivelaxe_tip3"));
         }
-        return tooltips;
     }
 
     @Override
@@ -156,25 +154,25 @@ public class MultitoolToolItem extends CustomPickaxeToolItem {
             ServerClient client = player.getServerClient();
             int currentTileID = level.getTileID(tileX, tileY);
             if (expectedTileID != currentTileID) {
-                client.sendPacket(new PacketChangeTile(tileX, tileY, currentTileID));
+                client.sendPacket(new PacketChangeTile(level, tileX, tileY, currentTileID));
             }
 
             int currentObjectID = level.getObjectID(tileX, tileY);
             int currentObjectRotation = currentObjectID == 0 ? 0 : level.getObjectRotation(tileX, tileY);
             if (expectedObjectID != currentObjectID || expectedObjectRotation != currentObjectRotation) {
-                client.sendPacket(new PacketChangeObject(tileX, tileY, currentObjectID, currentObjectRotation));
+                client.sendPacket(new PacketChangeObject(level, tileX, tileY, currentObjectID, currentObjectRotation));
             }
         }
 
         // ToolItem.onAttack
         if (player == null) return item;
-        int animSpeed = this.getAnimSpeed(item, player);
-        ToolItemEvent toolEvent = new ToolItemEvent(player, seed, item, x - player.getX(), y - player.getY() + attackHeight, animSpeed, animSpeed, new HashMap<>());
+        int animSpeed = this.getAttackAnimTime(item, player);
+        ToolItemEvent toolEvent = new ToolItemEvent(player, seed, item, x - player.getX(), y - player.getY() + attackHeight, animSpeed, animSpeed);
         level.entityManager.addLevelEventHidden(toolEvent);
 
         // Our stuff
         if (!(player.getAttackHandler() instanceof MultitoolAttackHandler)) {
-            player.startAttackHandler(new MultitoolAttackHandler(player, slot, item, x, y, this.animAttacks, this.animSpeed, seed));
+            player.startAttackHandler(new MultitoolAttackHandler(player, slot, item, x, y, this.animAttacks, animSpeed, seed));
         }
         return item;
     }
