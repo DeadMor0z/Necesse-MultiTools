@@ -4,7 +4,6 @@ import drasouls.multitools.ObjectCategories;
 import drasouls.multitools.TileCategories;
 import drasouls.multitools.items.multitool.MultitoolAttackHandler;
 import drasouls.multitools.ui.MultitoolSidebarForm;
-import necesse.engine.Screen;
 import necesse.engine.localization.Localization;
 import necesse.engine.network.PacketReader;
 import necesse.engine.network.gameNetworkData.GNDItem;
@@ -12,6 +11,8 @@ import necesse.engine.network.gameNetworkData.GNDItemMap;
 import necesse.engine.network.packet.PacketChangeObject;
 import necesse.engine.network.packet.PacketChangeTile;
 import necesse.engine.network.server.ServerClient;
+import necesse.engine.window.GameWindow;
+import necesse.engine.window.WindowManager;
 import necesse.entity.levelEvent.toolItemEvent.ToolItemEvent;
 import necesse.entity.mobs.PlayerMob;
 import necesse.entity.mobs.attackHandler.AttackHandler;
@@ -50,7 +51,8 @@ public class MultitoolToolItem extends CustomPickaxeToolItem {
 
     @Override
     public void addToolTooltips(ListGameTooltips tooltips) {
-        if (!Screen.isKeyDown(340) && !Screen.isKeyDown(344)) {
+        GameWindow window = WindowManager.getWindow();
+        if (!window.isKeyDown(340) && !window.isKeyDown(344)) {
             tooltips.add(new StringTooltips(Localization.translate("ui", "shiftmoreinfo"), GameColor.LIGHT_GRAY));
         } else {
             tooltips.add(Localization.translate("itemtooltip", "drs_pivelaxe_tip1"));

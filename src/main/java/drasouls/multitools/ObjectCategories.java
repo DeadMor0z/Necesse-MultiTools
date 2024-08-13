@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ObjectCategories {
     public static final String EXCLUDED_TAG = "EXCLUDED";
     public static final String[] ORDERING = {
-            "ore", "walls", "harvestable", "crafting", "storage", "objects", "transport", "wiring", "clutter"
+            "ore", "walls", "harvestable", "crafting", "storage", "objects", "transport", "wiring", "clutter", "summon", "other"
     };
     public static final Map<String, Set<String>> COMPUTED = new LinkedHashMap<>();
     static { for (String s : ORDERING) COMPUTED.computeIfAbsent(s, k -> ConcurrentHashMap.newKeySet()); }
@@ -45,8 +45,8 @@ public class ObjectCategories {
                 || object instanceof RoyalEggObject
                 || object instanceof SpiderEggObject) {
             // misc
-            // cat = CAT("misc", "summon");
-            cat = CAT(EXCLUDED_TAG);
+            cat = CAT("summon");
+            //cat = CAT(EXCLUDED_TAG);
         } else if (object instanceof GrassObject
                 || object instanceof CoinPileObject
                 || object instanceof SnowPileObject
@@ -154,8 +154,8 @@ public class ObjectCategories {
             // wiring objects
             cat = CAT("wiring");
         } else {
-            GameLog.warn.printf("Uncategorized object %s of type %s, id %s\n", object.getDisplayName(), object.getClass(), object.getStringID());
-            return;
+            GameLog.warn.printf("Uncategorized object %s of type %s, id %s, added to \"other\" category\n", object.getDisplayName(), object.getClass(), object.getStringID());
+            cat = CAT("other");
         }
 
         if (EXCLUDED_TAG.equals(cat[0])) return;

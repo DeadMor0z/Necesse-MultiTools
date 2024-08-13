@@ -9,7 +9,7 @@ import necesse.engine.network.PacketReader;
 import necesse.engine.network.PacketWriter;
 import necesse.engine.network.gameNetworkData.GNDItem;
 import necesse.engine.network.gameNetworkData.GNDItemMap;
-import necesse.engine.tickManager.TickManager;
+import necesse.engine.gameLoop.tickManager.TickManager;
 import necesse.engine.util.GameRandom;
 import necesse.entity.levelEvent.LevelEvent;
 import necesse.entity.mobs.PlayerMob;
@@ -56,7 +56,7 @@ public class PlannerLevelEvent extends LevelEvent {
             throw new IllegalArgumentException("item using this event should be a PlannerItem");
         this.player = player;
         this.item = item;
-        this.placeInterval = item.item.getAttackCooldownTime(item, player) / 2;
+        this.placeInterval = item.item.getAttackAnimTime(item, player) / 2;
 
         if (player.getLevel().isClientLevel()) {
             activeOnClient = true;
@@ -253,7 +253,7 @@ public class PlannerLevelEvent extends LevelEvent {
         }
         if (current != this.item) {
             this.item = current;
-            this.placeInterval = this.item.item.getAttackCooldownTime(this.item, this.player) / 2;
+            this.placeInterval = this.item.item.getAttackAnimTime(this.item, this.player) / 2;
         }
         if (! ((PlannerItem)this.item.item).getCurrentInventoryItem(this.item).isPresent()) {
             this.item.getGndData().setItem("p1", null);

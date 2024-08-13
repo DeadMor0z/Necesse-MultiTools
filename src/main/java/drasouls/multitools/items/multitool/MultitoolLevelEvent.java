@@ -7,7 +7,7 @@ import necesse.engine.GlobalData;
 import necesse.engine.Settings;
 import necesse.engine.network.PacketReader;
 import necesse.engine.network.PacketWriter;
-import necesse.engine.tickManager.TickManager;
+import necesse.engine.gameLoop.tickManager.TickManager;
 import necesse.entity.levelEvent.LevelEvent;
 import necesse.entity.mobs.PlayerMob;
 import necesse.gfx.camera.GameCamera;
