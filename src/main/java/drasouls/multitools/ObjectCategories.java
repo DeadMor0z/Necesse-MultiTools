@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ObjectCategories {
     public static final String EXCLUDED_TAG = "EXCLUDED";
     public static final String[] ORDERING = {
-            "ore", "walls", "harvestable", "crafting", "storage", "objects", "transport", "wiring", "clutter", "summon", "other"
+            "ore", "walls", "light", "harvestable", "crafting", "storage", "objects", "transport", "wiring", "clutter", "summon", "other"
     };
     public static final Map<String, Set<String>> COMPUTED = new LinkedHashMap<>();
     static { for (String s : ORDERING) COMPUTED.computeIfAbsent(s, k -> ConcurrentHashMap.newKeySet()); }
@@ -64,6 +64,10 @@ public class ObjectCategories {
             // clutter 2 (breakables)
             // cat = CAT("misc", "lootable");
             cat = CAT("clutter");
+        } else if (object instanceof TorchObject
+                || object instanceof TikiTorchObject
+                || object instanceof WallTorchObject) {
+            cat = CAT("light");
         } else if (object instanceof BannerStandObject
                 || object instanceof SpideriteArmorStandObject
                 || object instanceof CampfireObject
